@@ -22,7 +22,7 @@ import { useRouter } from 'next/router'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import { API } from '../service/api'
+import { API } from '../../service/api'
 
 const SinglePropertyAltPage = () => {
 
@@ -43,8 +43,8 @@ const SinglePropertyAltPage = () => {
   
     const getThumbnails = async (e) => {
         try {
-            let resp = await API.getPropertyById(id)
-            
+            let response = await API.getPropertyById(id)
+            const resp=response.data
             setThumbnailsReady(true);
             console.log(resp)
             setThumbnails(resp.images);
@@ -126,18 +126,11 @@ const SinglePropertyAltPage = () => {
           grabCursor
           className='swiper-nav-onhover rounded-3'
         >
-          <SwiperSlide className='d-flex'>
-            <ImageLoader className='rounded-3' src='/images/real-estate/single/09.jpg' width={967} height={545} alt='Image' />
+          {thumbnails.map((thumbnail, index) => (
+          <SwiperSlide key={index} className='d-flex'>
+            <ImageLoader className='rounded-3' src={thumbnail} width={967} height={545} alt={`Image ${index + 1}`} />
           </SwiperSlide>
-          <SwiperSlide className='d-flex'>
-            <ImageLoader className='rounded-3' src='/images/real-estate/single/10.jpg' width={967} height={545} alt='Image' />
-          </SwiperSlide>
-          <SwiperSlide className='d-flex'>
-            <ImageLoader className='rounded-3' src='/images/real-estate/single/11.jpg' width={967} height={545} alt='Image' />
-          </SwiperSlide>
-          <SwiperSlide className='d-flex'>
-            <ImageLoader className='rounded-3' src='/images/real-estate/single/12.jpg' width={967} height={545} alt='Image' />
-          </SwiperSlide>
+        ))}
           <SwiperSlide>
             <div className='ratio ratio-16x9'>
               <iframe src='https://www.youtube.com/embed/dofyR9p8e7w' className='rounded-3' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
@@ -154,14 +147,19 @@ const SinglePropertyAltPage = () => {
 
 
   const [property, setProperty] = useState([]);
+  const [category, setCategory] = useState('');
+  const [description, setDescription] = useState('');
+  const [price,setPrice]= useState(0);
   const [bathroom, setBathroom] = useState(0);
   const [bedroom, setBedroom] = useState(0);
   const [parking, setParking] = useState(0);
-  const [amenities, setAmenities] = useState([]);
+  let [amenities, setAmenities] = useState([]);
 
     const getProperty = async (e) => {
         try {
-           let resp = await API.getPropertyById(id)
+           let response = await API.getPropertyById(id)
+           
+            const resp=response.data
             // console.log(resp[0].thumbnails);
             // setThumbnailsReady(true);
             
@@ -169,7 +167,10 @@ const SinglePropertyAltPage = () => {
             setBedroom(resp.footer[0]);
             setBathroom(resp.footer[1]);
             setParking(resp.footer[2]);
-            console.log(resp.amenities)
+            setPrice(resp.price)
+            setDescription(resp.description)
+            setCategory(resp.category)
+            //console.log(resp.amenities)
             setAmenities(resp.amenities);
             // console.log(thumbnails);
             
@@ -179,42 +180,27 @@ const SinglePropertyAltPage = () => {
         }
    
 }
+const [properties, setProperties] = useState([])
+const fetchData = async () => {
+        try {
+            const response = await API.getAllProperty();
+            if (response.isSuccess) {
+              
+                setProperties(response.data);
+            } else {
+                console.error("Error fetching data:", response.error);
+            }
+        } catch (error) {
+            console.error("An error occurred while fetching data:", error);
+        }
+    };
 useEffect(() => {
   getProperty();
+  fetchData();
+
 }, [id])
 console.log(amenities[0]);
 
-//   const [amenities, setAmenities ] = useState([]);
-// const [amenitiesOpen, setAmenitiesOpen] = useState(false)
-// // // const [thumbnailsReady, setThumbnailsReady] = useState(false);
-
-// const getAmenities = async (e) => {
-//     try {
-//         let response = await fetch("http://localhost:8000/api/properties");
-//         // console.log(response.json())
-//         let resp = await response.json();
-//         resp = resp.filter(res => res.id === 123)
-//         console.log(resp[0].amenities);
-//         // setThumbnailsReady(true);
-        
-//         // setAmenities(resp[0].amenities);
-//         setAmenities(prevAmenities => [...prevAmenities, ...resp[0].amenities]);
-//         // console.log(thumbnail);
-//         console.log("JSON RESPONSE:::::", response.status)
-//         console.log(amenities)
-//     }
-//     catch(error) {
-//         console.log(error);
-//     }
-
-// }
-// useEffect(() => {
-// getAmenities();
-// }, [])
-// useEffect(() => {
-//     console.log("Updated Amenities:", amenities);
-//   }, [amenities]);
-// console.log(amenities)
 
 
 
@@ -223,91 +209,10 @@ console.log(amenities[0]);
 
 
 
-  // Amenities array
-  // const amenities = [
-  //   [
-  //     { icon: 'fi-wifi', title: 'Free WiFi' },
-  //     { icon: 'fi-thermometer', title: 'Heating' },
-  //     { icon: 'fi-dish', title: 'Dishwasher' },
-  //     { icon: 'fi-parking', title: 'Parking place' },
-  //     { icon: 'fi-snowflake', title: 'Air conditioning' },
-  //     { icon: 'fi-iron', title: 'Iron' },
-  //     { icon: 'fi-tv', title: 'TV' },
-  //     { icon: 'fi-laundry', title: 'Laundry' },
-  //     { icon: 'fi-cctv', title: 'Security cameras' },
-  //     { icon: 'fi-no-smoke', title: 'No smocking' }
-  //   ],
-  //   [
-  //     { icon: 'fi-double-bed', title: 'Double bed' },
-  //     { icon: 'fi-bed', title: 'Single bed' }
-  //   ],
-  //   [
-  //     { icon: 'fi-swimming-pool', title: 'Swimming pool' },
-  //     { icon: 'fi-cafe', title: 'Restaurant' },
-  //     { icon: 'fi-spa', title: 'Spa lounge' },
-  //     { icon: 'fi-cocktail', title: 'Bar' }
-  //   ]
-  // ]
-
-  // Recently viewed properties array
-  const properties = [
-    {
-      href: '/real-estate/single-v2',
-      images: [['/images/real-estate/catalog/39.jpg', 467, 305, 'Image']],
-      title: 'Modern House | 90 sq.m',
-      category: 'For sale',
-      location: '67-04 Myrtle Ave Glendale, NY 11385',
-      price: '$84,000',
-      badges: [],
-      footer: [4, 2, 2]
-    },
-    {
-      href: '/real-estate/single-v2',
-      images: [['/images/real-estate/catalog/40.jpg', 467, 305, 'Image']],
-      title: 'Country House | 120 sq.m',
-      category: 'For rent',
-      location: '3811 Ditmars Blvd Astoria, NY 11105',
-      price: '$1,650',
-      badges: [],
-      footer: [3, 2, 2]
-    },
-    {
-      href: '/real-estate/single-v2',
-      images: [['/images/real-estate/catalog/41.jpg', 467, 305, 'Image']],
-      title: 'Luxury Rental Villa | 180 sq.m',
-      category: 'For rent',
-      location: '1510 Castle Hill Ave Bronx, NY 10462',
-      price: '$1,330',
-      badges: [],
-      footer: [3, 1, 1]
-    },
-    {
-      href: '/real-estate/single-v2',
-      images: [['/images/real-estate/catalog/42.jpg', 467, 305, 'Image']],
-      title: 'Duplex with Garage | 200 sq.m',
-      category: 'For sale',
-      location: '140-60 Beech Ave Flushing, NY 11355',
-      price: '$165,000',
-      badges: [],
-      footer: [4, 2, 1]
-    },
-    {
-      href: '/real-estate/single-v2',
-      images: [['/images/real-estate/catalog/43.jpg', 467, 305, 'Image']],
-      title: 'Merry House | 98 sq.m',
-      category: 'For sale',
-      location: '123-12 Jamaica Ave Queens, NY 11418',
-      price: '$351,900',
-      badges: [],
-      footer: [3, 1, 2]
-    }
-  ]
-
-
   return (
     <>
      { showComponent && property && <RealEstatePageLayout
-      pageTitle='Single Property v.2'
+      pageTitle='Single Property'
       activeNav='Catalog'
     >
 
@@ -357,10 +262,10 @@ console.log(amenities[0]);
 
             {/* Overview */}
             <h2 className='h5'>Overview</h2>
-            <p className='mb-4 pb-2'>Etiam ut morbi egestas nunc quis. Nulla tincidunt senectus suspendisse neque, sed sem ut donec sed. Nullam hac netus quis nec tortor mi auctor risus praesent. In pharetra consequat diam nibh consectetur aliquet nulla. Non convallis nascetur viverra viverra diam vel bibendum sed. Elementum odio sed etiam consequat scelerisque in. Diam sit donec nunc enim. Tellus, commodo eget pharetra pharetra quis pellentesque. Enim aliquam sit in porttitor sed gravida a. Aliquam ac tellus sit erat. Non, et ac enim felis. Proin habitasse sit ut mauris, aliquam ornare pretium, nulla aliquam. Scelerisque velit netus quis mauris, dictumst suspendisse tortor.</p>
+            <p className='mb-4 pb-2'>{description}</p>
 
             {/* Agent card */}
-            <h2 className='h5'>Rental agent</h2>
+            {/* <h2 className='h5'>Rental agent</h2>
             <Card className='card-horizontal'>
               <div className='card-img-top bg-size-cover bg-position-center-x' style={{backgroundImage: 'url(/images/real-estate/agents/01.jpg)'}}></div>
               <Card.Body as='blockquote' className='blockquote'>
@@ -379,7 +284,7 @@ console.log(amenities[0]);
                   </div>
                 </footer>
               </Card.Body>
-            </Card>
+            </Card> */}
           </Col>
 
 
@@ -430,10 +335,12 @@ console.log(amenities[0]);
               </div>
 
               {/* Price */}
-              <h3 className='h5 mb-2'>Monthly rent:</h3>
+              <h3 className='h5 mb-2'>{ category === 'rent' ? "Monthly rent:" :"Total cost:" } </h3>
               <h2 className='h3 mb-4 pb-2'>
-                $2,000
-                <span className='d-inline-block ms-1 fs-base fw-normal text-body'>/month</span>
+                ₹ {price} { category === 'rent' ?
+                 <span className='d-inline-block ms-1 fs-base fw-normal text-body'>/month</span>
+               : "" } 
+                
               </h2>
 
               {/* Property details card */}
@@ -452,25 +359,30 @@ console.log(amenities[0]);
                 </Card.Body>
               </Card>
 
-              <Button size='lg' className='w-100 mb-3'>Book a viewing</Button>
-
-              <Link href='#' className='d-inline-block mb-4 pb-2 text-decoration-none'>
-                <i className='fi-help me-2 mt-n1 align-middle'></i>
-                Frequently asked questions
+              <Link href={{
+                pathname: '/contacts',
+                query: { id: id, title: property.title, address: property.address + ', ' + property.city + ', ' + property.zipCode }
+              }}>
+                
+                  <Button size='lg' className='w-100 mb-3'>Book a viewing</Button>
+              
               </Link>
+
+
+             
 
               {/* Amenities card */}
               <Card className='border-0 bg-secondary mb-4'>
                 <Card.Body>
                   <h5>Amenities</h5>
                   <Row as='ul' xs={1} md={2} className='list-unstyled gy-2 mb-0 text-nowrap'>
-                  {amenities.length ? (amenities[0] = amenities[0].filter(amenity => !amenity.checked) , amenities[0].map(({icon, value}, indx) => (
-  <Col key={indx} as='li'>
-    <i className={`${icon} mt-n1 me-2 fs-lg align-middle`}></i>
-    {value}
-  </Col>
-))) : (console.log("object"), null)}
-                  </Row>
+                  {amenities.length ? (amenities[0] = amenities.filter(amenity => amenity.checked===true) , amenities[0].map(({icon, value}, indx) => (
+                    <Col key={indx} as='li'>
+                      <i className={`${icon} mt-n1 me-2 fs-lg align-middle`}></i>
+                      {value}
+                    </Col>
+                  ))) : (console.log("object"), null)}
+                                    </Row>
                   {/* <Collapse in={amenitiesOpen}>
                     <div id='moreAmenities'>
                       <Row as='ul' md={2} xs={1} className='list-unstyled pt-2 gy-2 mb-0 text-nowrap'>
@@ -529,7 +441,7 @@ console.log(amenities[0]);
       <Container as='section' className='mb-5 pb-2 pb-lg-4'>
         <div className='d-flex align-items-center justify-content-between mb-3'>
           <h2 className='h3 mb-0'>Recently viewed</h2>
-          <Button as={Link} href='/real-estate/catalog?category=rent' variant='link fw-normal p-0'>
+          <Button as={Link} href='/catalog?category=rent' variant='link fw-normal p-0'>
             View all
             <i className='fi-arrow-long-right ms-2'></i>
           </Button>
@@ -557,11 +469,11 @@ console.log(amenities[0]);
             }}
             className='pt-3 pb-4 mx-n2'
           >
-            {properties.map((property, indx) => (
+            {properties.map((property, indx) => indx<5 && (
               <SwiperSlide key={indx} className='h-auto'>
                 <PropertyCard
                   href={property.href}
-                  images={property.images}
+                  images={[[property.images[0], 467, 305,'Image']]}
                   title={property.title}
                   category={property.category}
                   location={property.location}

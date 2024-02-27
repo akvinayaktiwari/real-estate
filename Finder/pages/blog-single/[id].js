@@ -15,7 +15,7 @@ import Tooltip from 'react-bootstrap/Tooltip'
 import Avatar from '../../components/Avatar'
 
 
-import { API } from '../service/api'
+import { API } from '../../service/api'
 
 
 

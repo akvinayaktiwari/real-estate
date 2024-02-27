@@ -4,8 +4,8 @@ import Head from "next/head";
 import NProgress from "nprogress";
 import ScrollTopButton from "../components/ScrollTopButton";
 import "../scss/theme.scss";
-import { FilterContextProvider } from "./context/filter_context";
-import { AppProvider, useAppContext } from "./context/productContext";
+import { FilterContextProvider } from "../context/filter_context";
+import { AppProvider, useAppContext } from "../context/productContext";
 
 const Finder = ({ Component, pageProps }) => {
   // Bind NProgress to Next Router events (Page loading animation)

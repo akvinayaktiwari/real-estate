@@ -29,24 +29,9 @@ import { useRouter } from 'next/router'
 import NumberFormat from 'react-number-format'
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
-import { API } from '../service/api'
+import { API } from '../../service/api'
 
-const MapContainer = dynamic(() => 
-  import('react-leaflet').then(mod => mod.MapContainer),
-  { ssr: false }
-)
-const TileLayer = dynamic(() => 
-  import('react-leaflet').then(mod => mod.TileLayer),
-  { ssr: false }
-)
-const Popup = dynamic(() => 
-  import('react-leaflet').then(mod => mod.Popup),
-  { ssr: false }
-)
-const CustomMarker = dynamic(() => 
-  import('../../components/partials/CustomMarker'),
-  { ssr: false }
-)
+
 import 'leaflet/dist/leaflet.css'
 
 
@@ -319,42 +304,7 @@ const handlePreviewShow = () => {
 } 
 
 
-  // const loadProperties = async () => {
-  //   try {
-  //       let response = await axios.get("http://localhost:8000/properties");
-  //       // console.log(response.json())
-  //       console.log(response)
-  //       let resp = await response.data;
-  //       resp = resp.filter(res =>{
-  //           console.log(res._id === id);
-  //          return res._id === id
-  //       } 
-  //       )
-  //       console.log(resp);
-  //       console.log(resp.title)
-  //       // console.log(resp[0].thumbnails);
-  //       // setThumbnailsReady(true);
-        
-  //       // setProperty(resp[0]);
-  //       setTitle(resp[0].title)
-  //       setArea(resp[0].area);
-  //       setAddress(resp[0].address);
-  //       setCategory(resp[0].category.substring(4));
-  //       setCity(resp[0].city);
-  //       setZipCode(resp[0].zipCode);
-  //       setAmenities(resp[0].amenities);
-  //       // // setCity(resp[0].city);
-  //       setPrice(resp[0].price);
-  //       setBedroomsValue( resp[0].footer[0].toString());
-  //       setBathroomsValue(resp[0].footer[1].toString());
-  //       setParkingsValue(resp[0].footer[2].toString());
-  //       // console.log(thumbnails);
-  //       console.log("JSON RESPONSE:::::", response.status)
-  //   }
-  //   catch(error) {
-  //       console.log(error);
-  //   }
-  // }
+ 
 
 
   const [property,setProperty]= useState({})

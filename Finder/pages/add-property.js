@@ -29,7 +29,7 @@ import axios from 'axios';
 import NumberFormat from 'react-number-format'
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
-import { API } from './service/api'
+import { API } from '../service/api'
 
 const MapContainer = dynamic(() => 
   import('react-leaflet').then(mod => mod.MapContainer),
@@ -194,7 +194,7 @@ const AddPropertyPage = () => {
             console.log(f.file)
             data.append("files", f.file); // Use the same key for each file
           });
-          fetch('http://localhost:8000/uploadgallery', {
+          fetch('http://localhost:8080/uploadgallery', {
             method: 'POST',
             body: data,
           })
@@ -316,6 +316,7 @@ const AddPropertyPage = () => {
     images:gallery,
     title: title,
     area: area,
+    propertyType:propertyType,
     category: category,
     location: address,
     price: parseInt(price),
@@ -471,7 +472,7 @@ const AddPropertyPage = () => {
 
                 {/* Price */}
                 <h2 className='h3 mb-4 pb-4 border-bottom'>
-                  {'$' + price}
+                  {'₹' + price}
                 { category === 'rent' ?
 
                  <span className='d-inline-block ms-1 fs-base fw-normal text-body'>/month</span>
@@ -688,28 +689,7 @@ const AddPropertyPage = () => {
                 </Form.Group>
               </Row>
               <Form.Label className='fw-bold pt-3 pb-2'>Display on the map</Form.Label>
-              {/* <MapContainer
-                center={[40.7447, -73.9485]}
-                zoom={13}
-                scrollWheelZoom={false}
-                style={{height: '250px'}}
-              >
-                <TileLayer
-                  url='https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=BO4zZpr0fIIoydRTOLSx'
-                  tileSize={512}
-                  zoomOffset={-1}
-                  minZoom={1}
-                  attribution={'\u003ca href=\'https://www.maptiler.com/copyright/\' target=\'_blank\'\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href=\'https://www.openstreetmap.org/copyright\' target=\'_blank\'\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e'}
-                />
-                <CustomMarker position={[40.7447, -73.9485]} icon='dot'>
-                  <Popup>
-                    <div className='p-3'>
-                      <h6>Pine Apartments</h6>
-                      <p className='fs-xs text-muted pt-1 mt-n3 mb-0'>28 Jackson Ave Long Island City, NY</p>
-                    </div>
-                  </Popup>
-                </CustomMarker>
-              </MapContainer> */}
+              
             </section>
 
 

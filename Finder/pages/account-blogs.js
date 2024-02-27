@@ -7,7 +7,7 @@ import Nav from 'react-bootstrap/Nav'
 import Button from 'react-bootstrap/Button'
 import PropertyCard from '../components/PropertyCard'
 
-import { API } from './service/api'
+import {API}  from '../service/api'
 
 
 const AccountPropertiesPage = () => {

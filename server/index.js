@@ -21,8 +21,8 @@ app.use('/',Router)
 app.use('/blog-images', express.static(path.join(__dirname, 'blog-images')));
 app.use('/property-images', express.static(path.join(__dirname, 'property-images')));
 
-const PORT=8000;
+const PORT=8080;
 
-app.listen(PORT,()=>{console.log('server is running on 8000')});
+app.listen(PORT,()=>{console.log('server is running on 8080')});
 
 Connection();

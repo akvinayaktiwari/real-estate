@@ -22,7 +22,7 @@ import { FilePond, registerPlugin } from 'react-filepond'
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 
-import { API } from "../service/api.js";
+import { API } from "../../service/api.js";
 
 import 'leaflet/dist/leaflet.css'
 

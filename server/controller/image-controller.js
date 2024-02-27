@@ -1,7 +1,7 @@
 import multer from "multer";
 import path from 'path'
 
-const url = 'http://localhost:8000';
+const url = 'http://localhost:8080';
 const galUploadDirectory = 'blog-images';
 const uploadDirectory = 'property-images';
 

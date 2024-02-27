@@ -20,7 +20,7 @@ const PropertiesSchema = mongoose.Schema({
     },
     title: {
         type: String,
-        //required: true,
+       // required: true,
     },
     area: {
         type: Number,
@@ -30,10 +30,6 @@ const PropertiesSchema = mongoose.Schema({
         type: String,
         //required: true,
     },
-    type: {
-        type: String,
-        //required: true
-    },
     address: {
         type: String,
         //required: true,
@@ -42,11 +38,11 @@ const PropertiesSchema = mongoose.Schema({
         type: String,
         //required: true,
     },
-    zipCode: {
-        type: Number,
+    price: {
+        type: String,
         //required: true,
     },
-    price: {
+    description: {
         type: String,
         //required: true,
     },
@@ -54,6 +50,14 @@ const PropertiesSchema = mongoose.Schema({
         type: Array,
         //required: true,
     },
+    featured:{
+        type: Boolean,
+        //default: false,
+    },
+    propertyType:{
+        type: String,
+        //required: true
+    }
 
 });
 

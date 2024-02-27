@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  finder:
+    build: ./finder
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - server
+  server:
+    build: ./server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=production
+    command: node index.js

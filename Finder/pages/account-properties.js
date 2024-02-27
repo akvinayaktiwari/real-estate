@@ -9,7 +9,7 @@ import PropertyCard from '../components/PropertyCard'
 import axios from 'axios' 
 // import './account-property.css';
 
-import { API } from './service/api'
+import { API } from '../service/api'
 
 const AccountPropertiesPage = () => {
   const router=useRouter()
@@ -72,7 +72,7 @@ const AccountPropertiesPage = () => {
   const [blogs, setBlogs ] = useState([]);
 
 const getProperty = async (e) => {
-  let response = await axios.get("http://localhost:8000/properties");
+  let response = await axios.get("http://localhost:8080/properties");
   console.log(response)
   let resp = await response.data;
   console.log(resp);
@@ -115,12 +115,12 @@ const getProperty = async (e) => {
           defaultActiveKey='published'
           className='border-bottom mb-4'
         >
-          <Nav.Item className='mb-3'>
+          {/* <Nav.Item className='mb-3'>
             <Nav.Link eventKey='published'>
               <i className='fi-file fs-base me-2'></i>
               Published
             </Nav.Link>
-          </Nav.Item>
+          </Nav.Item> */}
           <Nav.Item className='mb-3'>
             <Nav.Link eventKey='drafts'>
               <i className='fi-file-clean fs-base me-2'></i>
@@ -140,7 +140,7 @@ const getProperty = async (e) => {
           // console.log(property[indx]._id),
           <PropertyCard
         key={indx}
-        href={property.href}
+        href={`/single/${property._id}`}
         images= {[[property.images[0], 'Image']]}
         category={property.category}
         title={property.title}

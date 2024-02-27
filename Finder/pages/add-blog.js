@@ -21,7 +21,7 @@ import { FilePond, registerPlugin } from 'react-filepond'
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 
-import { API } from "./service/api.js";
+import { API } from "../service/api.js";
 
 import 'leaflet/dist/leaflet.css'
 
@@ -126,7 +126,7 @@ const AddPropertyPage = () => {
     data.append("name", files.name);
     data.append("file", files);
     
-    fetch('http://localhost:8000/upload', {
+    fetch('http://localhost:8080/upload', {
         method: 'POST',
         body: data,
     })
@@ -288,217 +288,7 @@ const AddPropertyPage = () => {
             </section>
 
 
-            {/* Location */}
-            {/* <section id='location' className='card card-body border-0 shadow-sm p-4 mb-4'>
-              <h2 className='h4 mb-4'>
-                <i className='fi-map-pin text-primary fs-5 mt-n1 me-2'></i>
-                Location
-              </h2>
-              <Row>
-                <Form.Group as={Col} sm={6} controlId='ap-country' className='mb-3'>
-                  <Form.Label>Country / region <span className='text-danger'>*</span></Form.Label>
-                  <Form.Select defaultValue='US' required>
-                    <option value='' disabled>Choose country</option>
-                    <option value='Australia'>Australia</option>
-                    <option value='Belgium'>Belgium</option>
-                    <option value='Germany'>Germany</option>
-                    <option value='Canada'>Canada</option>
-                    <option value='US'>United States</option>
-                  </Form.Select>
-                </Form.Group>
-                <Form.Group as={Col} sm={6} controlId='ap-city' className='mb-3'>
-                  <Form.Label>City <span className='text-danger'>*</span></Form.Label>
-                  <Form.Select defaultValue='New York' required>
-                    <option value='' disabled>Choose city</option>
-                    <option value='Chicago'>Chicago</option>
-                    <option value='Dallas'>Dallas</option>
-                    <option value='Los Angeles'>Los Angeles</option>
-                    <option value='New York' >New York</option>
-                    <option value='San Diego'>San Diego</option>
-                  </Form.Select>
-                </Form.Group>
-                <Form.Group as={Col} sm={8} controlId='ap-district' className='mb-3'>
-                  <Form.Label>District <span className='text-danger'>*</span></Form.Label>
-                  <Form.Select defaultValue='Queens' required>
-                    <option value='' disabled>Choose district</option>
-                    <option value='Brooklyn'>Brooklyn</option>
-                    <option value='Manhattan'>Manhattan</option>
-                    <option value='Staten Island'>Staten Island</option>
-                    <option value='The Bronx'>The Bronx</option>
-                    <option value='Queens'>Queens</option>
-                  </Form.Select>
-                </Form.Group>
-                <Form.Group as={Col} sm={4} controlId='ap-zip' className='mb-3'>
-                  <Form.Label>Zip code <span className='text-danger'>*</span></Form.Label>
-                  <Form.Control defaultValue='67234' placeholder='Enter Zip code' required />
-                </Form.Group>
-                <Form.Group as={Col} sm={12} controlId='ap-address' className='mb-3'>
-                  <Form.Label>Street address <span className='text-danger'>*</span></Form.Label>
-                  <Form.Control defaultValue='28 Jackson Avenue' required />
-                </Form.Group>
-              </Row>
-              <Form.Label className='fw-bold pt-3 pb-2'>Display on the map</Form.Label>
-              <MapContainer
-                center={[40.7447, -73.9485]}
-                zoom={13}
-                scrollWheelZoom={false}
-                style={{height: '250px'}}
-              >
-                <TileLayer
-                  url='https://api.maptiler.com/maps/pastel/{z}/{x}/{y}.png?key=BO4zZpr0fIIoydRTOLSx'
-                  tileSize={512}
-                  zoomOffset={-1}
-                  minZoom={1}
-                  attribution={'\u003ca href=\'https://www.maptiler.com/copyright/\' target=\'_blank\'\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href=\'https://www.openstreetmap.org/copyright\' target=\'_blank\'\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e'}
-                />
-                <CustomMarker position={[40.7447, -73.9485]} icon='dot'>
-                  <Popup>
-                    <div className='p-3'>
-                      <h6>Pine Apartments</h6>
-                      <p className='fs-xs text-muted pt-1 mt-n3 mb-0'>28 Jackson Ave Long Island City, NY</p>
-                    </div>
-                  </Popup>
-                </CustomMarker>
-              </MapContainer>
-            </section> */}
-
-
-            {/* Property details */}
-            {/* <section id='details' className='card card-body border-0 shadow-sm p-4 mb-4'>
-              <h2 className='h4 mb-4'>
-                <i className='fi-edit text-primary fs-5 mt-n1 me-2'></i>
-                Property details
-              </h2>
-              <Form.Group controlId='ap-area' className='mb-4' style={{maxWidth: '25rem'}}>
-                <Form.Label>Total area, sq.m</Form.Label>
-                <Form.Control type='number' defaultValue={56} min={20} placeholder='Enter your area' />
-              </Form.Group>
-              <Form.Group className='mb-4'>
-                <Form.Label className='d-block fw-bold mb-2 pb-1'>Bedrooms</Form.Label>
-                <ButtonGroup size='sm'>
-                  {bedrooms.map((bedroom, indx) => (
-                    <ToggleButton
-                      key={indx}
-                      type='radio'
-                      id={`bedrooms-${indx}`}
-                      name='bedrooms'
-                      value={bedroom.value}
-                      checked={bedroomsValue === bedroom.value}
-                      onChange={(e) => setBedroomsValue(e.currentTarget.value)}
-                      variant='outline-secondary fw-normal'
-                    >{bedroom.name}</ToggleButton>
-                  ))}
-                </ButtonGroup>
-              </Form.Group>
-              <Form.Group className='mb-4'>
-                <Form.Label className='d-block fw-bold mb-2 pb-1'>Bathrooms</Form.Label>
-                <ButtonGroup size='sm'>
-                  {bathrooms.map((bathroom, indx) => (
-                    <ToggleButton
-                      key={indx}
-                      type='radio'
-                      id={`bathrooms-${indx}`}
-                      name='bathrooms'
-                      value={bathroom.value}
-                      checked={bathroomsValue === bathroom.value}
-                      onChange={(e) => setBathroomsValue(e.currentTarget.value)}
-                      variant='outline-secondary fw-normal'
-                    >{bathroom.name}</ToggleButton>
-                  ))}
-                </ButtonGroup>
-              </Form.Group>
-              <Form.Group className='mb-4'>
-                <Form.Label className='d-block fw-bold mb-2 pb-1'>Parking spots</Form.Label>
-                <ButtonGroup size='sm'>
-                  {parkings.map((parking, indx) => (
-                    <ToggleButton
-                      key={indx}
-                      type='radio'
-                      id={`parkings-${indx}`}
-                      name='parkings'
-                      value={parking.value}
-                      checked={parkingsValue === parking.value}
-                      onChange={(e) => setParkingsValue(e.currentTarget.value)}
-                      variant='outline-secondary fw-normal'
-                    >{parking.name}</ToggleButton>
-                  ))}
-                </ButtonGroup>
-              </Form.Group>
-              <Form.Group className='mb-4'>
-                <Form.Label className='d-block fw-bold mb-2 pb-1'>Amenities</Form.Label>
-                <Row xs={1} sm={3}>
-                  {amenities.map((amenity, indx) => (
-                    <Col key={indx}>
-                      <Form.Check
-                        type='checkbox'
-                        id={`amenities-${indx}`}
-                        value={amenity.value}
-                        label={amenity.value}
-                        defaultChecked={amenity.checked}
-                      />
-                    </Col>
-                  ))}
-                </Row>
-              </Form.Group>
-              <Form.Group className='mb-4'>
-                <Form.Label className='d-block fw-bold mb-2 pb-1'>Pets</Form.Label>
-                <Row xs={1} sm={3}>
-                  <Col>
-                    {pets.map((pet, indx) => (
-                      <Form.Check
-                        key={indx}
-                        type='checkbox'
-                        id={`pets-${indx}`}
-                        value={pet.value}
-                        label={pet.value}
-                        defaultChecked={pet.checked}
-                      />
-                      ))}
-                  </Col>
-                </Row>
-              </Form.Group>
-              <Form.Group controlId='ap-description'>
-                <Form.Label>Description</Form.Label>
-                <Form.Control as='textarea' rows={5} placeholder='Describe your property'/>
-                <Form.Text>1500 characters left</Form.Text>
-              </Form.Group>
-            </section> */}
-
-
-            {/* Price */}
-            {/* <section id='price' className='card card-body border-0 shadow-sm p-4 mb-4'>
-              <h2 className='h4 mb-4'>
-                <i className='fi-cash text-primary fs-5 mt-n1 me-2'></i>
-                Price
-              </h2>
-              <Form.Label htmlFor='ap-price'>
-                Price <span className='text-danger'>*</span>
-              </Form.Label>
-              <div className='d-sm-flex'>
-                <Form.Select className='w-25 me-2 mb-2'>
-                  <option value='usd'>$</option>
-                  <option value='eur'>€</option>
-                  <option value='gbp'>£</option>
-                  <option value='jpy'>¥</option>
-                </Form.Select>
-                <Form.Control
-                  id='ap-price'
-                  type='number'
-                  min={200}
-                  step={50}
-                  className='w-100 me-2 mb-2'
-                  required
-                />
-                <Form.Select defaultValue='month' className='w-50 mb-2'>
-                  <option value='day'>per day</option>
-                  <option value='week'>per week</option>
-                  <option value='month'>per month</option>
-                  <option value='year'>per year</option>
-                </Form.Select>
-              </div>
-            </section> */}
-
-
+           
             {/* Photos */}
             <section id='photos' className='card card-body border-0 shadow-sm p-4 mb-4'>
               <h2 className='h4 mb-4'>

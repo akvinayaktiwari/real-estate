@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Container from 'react-bootstrap/Container'
@@ -15,6 +15,8 @@ import SocialButton from '../SocialButton'
 import MarketButton from '../MarketButton'
 import SignInModalLight from '../partials/SignInModalLight'
 import SignUpModalLight from '../partials/SignUpModalLight'
+
+import { API } from '../../service/api'
 
 const RealEstatePageLayout = (props) => {
 
@@ -39,6 +41,26 @@ const RealEstatePageLayout = (props) => {
     setSignupShow(false)
   }
 
+//   const [footerPosts, setFooterPosts] = useState([])
+//   const [blogs, setBlogs] = useState([]);
+
+//     useEffect(() => {
+//     const fetchData = async () => {
+//         try {
+//             const response = await API.getAllPosts();
+//             if (response.isSuccess) {
+              
+//                 setFooterPosts(response.data);
+//             } else {
+//                 console.error("Error fetching data:", response.error);
+//             }
+//         } catch (error) {
+//             console.error("An error occurred while fetching data:", error);
+//         }
+//     };
+
+//     fetchData();
+// }, []);
   // Footer recent blog posts array
   const footerPosts = [
     {
@@ -51,7 +73,7 @@ const RealEstatePageLayout = (props) => {
       comments: '2'
     },
     {
-      href: '/real-estate/blog-single',
+      href: '/blog-single',
       img: '/images/real-estate/blog/th02.jpg',
       category: 'Tips & Advice',
       title: 'Top 10 Ways to Refresh Your Space',
@@ -270,32 +292,32 @@ const RealEstatePageLayout = (props) => {
                         (302) 555-0107<br/>annette_black@email.com
                       </div>
                     </div>
-                    <Dropdown.Item as={Link} href='/real-estate/account-info'>
+                    <Dropdown.Item as={Link} href='/account-info'>
                       <i className='fi-user opacity-60 me-2'></i>
                       Personal Info
                     </Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/real-estate/account-security'>
+                    <Dropdown.Item as={Link} href='/account-security'>
                       <i className='fi-heart opacity-60 me-2'></i>
                       Password &amp; Security
                     </Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/real-estate/account-properties'>
+                    <Dropdown.Item as={Link} href='/account-properties'>
                       <i className='fi-home opacity-60 me-2'></i>
                       My Properties
                     </Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/real-estate/account-wishlist'>
+                    <Dropdown.Item as={Link} href='/account-wishlist'>
                       <i className='fi-heart opacity-60 me-2'></i>
                       Wishlist
                     </Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/real-estate/account-reviews'>
+                    <Dropdown.Item as={Link} href='/account-reviews'>
                       <i className='fi-star opacity-60 me-2'></i>
                       Reviews
                     </Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/real-estate/account-notifications'>
+                    <Dropdown.Item as={Link} href='/account-notifications'>
                       <i className='fi-bell opacity-60 me-2'></i>
                       Notifications
                     </Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item as={Link} href='/real-estate/help-center'>Help</Dropdown.Item>
+                    <Dropdown.Item as={Link} href='/help-center'>Help</Dropdown.Item>
                     <Dropdown.Item as={Link} href='/signin-light'>Sign Out</Dropdown.Item>
                   </Dropdown.Menu>
                 </Nav.Item> : 
@@ -402,10 +424,10 @@ const RealEstatePageLayout = (props) => {
             {/* Recent posts */}
             <Col lg={6} xl={{span: 5, offset: 1}}>
               <h4 className='h5'>Recent Posts</h4>
-              {footerPosts.map((post, indx) => (
+              {footerPosts.map((post, indx)  => indx<2 && (
                 <div key={indx}>
                   <article className='d-flex align-items-start' style={{maxWidth: '640px'}}>
-                    <Link href={post.href} className='d-none d-sm-flex flex-shrink-0 mb-sm-0 mb-3' style={{width: '100px', height: '100px'}}>
+                    <Link href={`/blog-single`} className='d-none d-sm-flex flex-shrink-0 mb-sm-0 mb-3' style={{width: '100px', height: '100px'}}>
                       <ImageLoader src={post.img} width={200} height={200} className='rounded-3' alt='Thumbnail' />
                     </Link>
                     <div className='ps-sm-4'>
@@ -414,10 +436,10 @@ const RealEstatePageLayout = (props) => {
                         <Link href={post.href} className='nav-link'>{post.title}</Link>
                       </h5>
                       <p className='mb-2 fs-sm'>{post.text}</p>
-                      <Link href='#' className='nav-link nav-link-muted d-inline-block me-3 p-0 fs-xs fw-normal'>
+                      {/* <Link href='#' className='nav-link nav-link-muted d-inline-block me-3 p-0 fs-xs fw-normal'>
                         <i className='fi-calendar mt-n1 me-1 fs-sm align-middle opacity-70'></i>
-                        {post.date}
-\                      </Link>
+                        //{post.date}
+\                      </Link> */}
                       {/* <Link href='#' className='nav-link nav-link-muted d-inline-block p-0 fs-xs fw-normal'>
                         <i className='fi-chat-circle mt-n1 me-1 fs-sm align-middle opacity-70'></i>
                         {`${post.comments} comments`}
