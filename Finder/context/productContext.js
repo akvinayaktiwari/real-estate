@@ -4,7 +4,7 @@ import reducer from "../reducer/productReducer"
 
 const AppContext=createContext();
 
-const API="http://localhost:8080/properties";
+const API="https://server-tpbkpxdbza-el.a.run.app/properties";
 
 const initialState={
   isLoading:false,

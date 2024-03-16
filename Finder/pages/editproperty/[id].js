@@ -39,6 +39,7 @@ const AddPropertyPage = () => {
 
     const router = useRouter()
     const { id } = router.query
+    console.log('hello')
     console.log(id);
 
   const [showComponent, setShowComponent] = useState(false);
@@ -147,6 +148,10 @@ const AddPropertyPage = () => {
     {value: 'Cats allowed', checked: false},
     {value: 'Dogs allowed', checked: false}
   ]
+  const [badges, setBadges] = useState( [
+    {value: 'Upcoming', checked: false},
+    {value: 'Verified', checked: false}
+  ])
 
   // Register Filepond plugins
   registerPlugin(
@@ -243,27 +248,27 @@ const handleDescriptionChange = (e) => {
   }
 
   const [price, setPrice] = useState(0);
-  const [data, setData] = useState({});
+  // const [data, setData] = useState({});
   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    amenities = amenities.filter(amenity => amenity.checked === true);
+    // amenities = amenities.filter(amenity => amenity.checked === true);
     let footer = [];
     footer.push(bedroomsValue, bathroomsValue, parkingsValue);
 
-    let amenitiesValue = [];
-    for (let amenity of amenities) {
-      amenitiesValue.push(amenity.value);
-    }
+    // let amenitiesValue = [];
+    // for (let amenity of amenities) {
+    //   amenitiesValue.push(amenity.value);
+    // }
     
     const headers = {
         "Content-Type": "application/json",
         // Authorization: apiKey,
     };
-    setData({
+    const data = {
       _id:id,
-      amenities: amenitiesValue,
+      amenities: amenities,
       href: '/real-estate/single-v2',
       title: title,
       area: parseInt(area),
@@ -273,13 +278,23 @@ const handleDescriptionChange = (e) => {
       // city: city,
       // zipCode: zipCode,
       price: parseInt(price),
+      badges: badges,
       description: description,
-      footer: footer
-    })
+      footer: footer,
+      address: address,
+      city:city,
+      zipCode:zipCode,
+    }
     console.log('hello')
     console.log(data);
     try{
-      await API.updatePost(data)
+      //await API.editProperty(data)
+      const response = await axios.put(`/api/property/editProperty`, data,{
+      headers: {
+        // Add any required headers here
+        'Content-Type': 'application/json',
+      },
+    })
       router.push('../account-properties')
     }
     catch(error){
@@ -294,7 +309,7 @@ const [previewAmenities, setPreviewAmenities] = useState([]);
 
 const handlePreviewShow = () => {
     setPreviewShow(true)
-    amenities = amenities[0].filter(amenity => amenity.checked === true);
+    amenities = amenities.filter(amenity => amenity.checked === true);
     console.log(amenities)
     let amenitiesValue = [];
     for (let amenity of amenities) {
@@ -303,30 +318,46 @@ const handlePreviewShow = () => {
     setPreviewAmenities(amenitiesValue);
 } 
 
+  const handleAmenitiesChange = (index) => {
+    const updatedAmenities = amenities.map((amenity, i) =>
+      i === index ? { ...amenity, checked: !amenity.checked } : amenity
+    );
+    setAmenities(updatedAmenities);
+  };
+
 
  
 
 
   const [property,setProperty]= useState({})
  useEffect(() => {
+            
+            
             const fetchData = async () => {
-                let response = await API.getPropertyById(id);
-                console.log(response)
+                // let response = await API.getPropertyById(id);
+                console.log('fetch data',id)
+                let response = await axios.get(`/api/property/getProperty/${id}`, {
+                  headers: {
+                    // Add any required headers here
+                    'Content-Type': 'application/json',
+                  },
+                });
+                console.log('hello from fetch')
+                console.log(response.data)
                 
-                if (response.isSuccess) {
+                if (response.data) {
                     const resp=response.data
-                    
-
-                    
                     setProperty(resp.data);
                     
                     setTitle(resp.title)
                     setArea(resp.area);
                     setAddress(resp.address);
-                    setCategory(resp.category.substring(4));
+                    setCategory(resp.category);
                     setCity(resp.city);
                     setZipCode(resp.zipCode);
                     setAmenities(resp.amenities);
+                    setDescription(resp.description);
+                    setGallery(resp.images);
                     // // setCity(resp[0].city);
                     setPrice(resp.price);
                     setBedroomsValue( resp.footer[0].toString());
@@ -335,15 +366,24 @@ const handlePreviewShow = () => {
                     console.log(title)
                 }
             }
-            fetchData();
+            if(id){
+             fetchData();
+          }
             
-        }, []);
+        }, [id]);
 
   
   const getCategory = () => {
       console.log(category)
       return category;
     }
+
+    const handleBadgeChange = (index) => {
+      const updatedBadges = badges.map((badge, i) =>
+        i === index ? { ...badge, checked: !badge.checked } : badge
+      );
+      setBadges(updatedBadges);
+    };
 
 
   return (
@@ -362,7 +402,7 @@ const handlePreviewShow = () => {
         <Modal.Header closeButton>
           <h3 className='h5 text-muted fw-normal modal-title d-none d-sm-block text-nowrap'>Property preview</h3>
           <div className='d-flex align-items-center justify-content-sm-end w-100 ms-sm-auto'>
-            <Button as={Link} href='/real-estate/property-promotion' size='sm' className='me-4'>Save and continue</Button>
+            <Button size='sm' className='me-4' onClick={handleSubmit}>Save and continue</Button>
             <span className='fs-xs text-muted ms-auto ms-sm-0 me-2'>[ESC]</span>
           </div>
         </Modal.Header>
@@ -429,36 +469,21 @@ const handlePreviewShow = () => {
 
               {/* Content */}
               <Col md={7} className='mb-md-0 mb-4'>
-                <Badge bg='success' className='me-2 mb-3'>Verified</Badge>
-                <Badge bg='info' className='me-2 mb-3'>New</Badge>
+              { badges[0].checked ? <Badge bg='info' className='me-2 mb-3'>Upcoming</Badge> : console.log(badges) }
+               { badges[1].checked ? <Badge bg='success' className='me-2 mb-3'>Verified</Badge> : console.log(badges)  }
 
                 {/* Price */}
                 <h2 className='h3 mb-4 pb-4 border-bottom'>
-                  {'$' + price}
+               
+                  {'₹' + price}
                   <span className='d-inline-block ms-1 fs-base fw-normal text-body'>/month</span>
                 </h2>
 
                 {/* Overview */}
                 <div className='mb-4 pb-md-3'>
                   <h3 className='h4'>Overview</h3>
-                  <p className='mb-1'>Lorem tincidunt lectus vitae id vulputate diam quam. Imperdiet non scelerisque turpis sed etiam ultrices. Blandit mollis dignissim egestas consectetur porttitor. Vulputate dolor pretium, dignissim eu augue sit ut convallis. Lectus est, magna urna feugiat sed ultricies sed in lacinia. Fusce potenti sit id pharetra vel ornare. Vestibulum sed tellus ullamcorper arcu.</p>
-                  <Collapse in={overviewOpen}>
-                    <div id='moreOverview'>
-                      <p className='mb-1'>Asperiores eos molestias, aspernatur assumenda vel corporis ex, magni excepturi totam exercitationem quia inventore quod amet labore impedit quae distinctio? Officiis blanditiis consequatur alias, atque, sed est incidunt accusamus repudiandae tempora repellendus obcaecati delectus ducimus inventore tempore harum numquam autem eligendi culpa.</p>
-                    </div>
-                  </Collapse>
-                  <a
-                    href='#'
-                    onClick={(e) => {
-                      e.preventDefault()
-                      setOverviewOpen(!overviewOpen)
-                    }}
-                    aria-controls='moreOverview'
-                    aria-expanded={overviewOpen}
-                    className={`collapse-label${overviewOpen ? '' : ' collapsed'}`}
-                  >
-                    {overviewOpen ? 'Show less' : 'Show more'}
-                  </a>
+                  <p className='mb-1'>{description}</p>
+                 
                 </div>
 
                 {/* Property details list */}
@@ -572,22 +597,6 @@ const handlePreviewShow = () => {
                   </Form.Select>
                 </Form.Group>
               </Row>
-              <div className='form-label fw-bold pt-3 pb-2'>Are you listing on Finder as part of a company?</div>
-              <Form.Check
-                type='radio'
-                name='businessType'
-                id='business'
-                value='Business'
-                label='I am a registered business'
-              />
-              <Form.Check
-                type='radio'
-                name='businessType'
-                id='private'
-                value='Private seller'
-                label='I am a private seller'
-                defaultChecked
-              />
             </section>
 
 
@@ -660,16 +669,14 @@ const handlePreviewShow = () => {
               <Form.Group className='mb-4'>
                 <Form.Label className='d-block fw-bold mb-2 pb-1'>Amenities</Form.Label>
                 <Row xs={1} sm={3}>
-                  {console.log(amenities[0])}
-                  {console.log(Array.isArray(amenities[0]))}
-                  {Array.isArray(amenities[0]) && amenities[0].map((amenity, indx) => (
+                  {amenities.map((amenity, indx) => (
                     <Col key={indx}>
                       <Form.Check
                         type='checkbox'
                         id={`amenities-${indx}`}
                         value={amenity.value}
                         label={amenity.value}
-                        onChange={() => amenity.checked = !amenity.checked }
+                        onChange={() => handleAmenitiesChange(indx)}
                         defaultChecked={amenity.checked}
                       />
                     </Col>
@@ -693,6 +700,23 @@ const handlePreviewShow = () => {
                   </Col>
                 </Row>
               </Form.Group> */}
+                <Form.Group className='mb-4'>
+                <Form.Label className='d-block fw-bold mb-2 pb-1'>Badges</Form.Label>
+                <Row xs={1} sm={3}>
+                  {badges.map((badge, indx) => (
+                    <Col key={indx}>
+                      <Form.Check
+                        type='checkbox'
+                        id={`amenities-${indx}`}
+                        value={badge.value}
+                        label={badge.value}
+                        onChange={() => handleBadgeChange(indx)}
+                        defaultChecked={badge.checked}
+                      />
+                    </Col>
+                  ))}
+                </Row>
+              </Form.Group>
               <Form.Group controlId='ap-description'>
                 <Form.Label>Description</Form.Label>
                 <Form.Control as='textarea' rows={5} placeholder='Describe your property' value = {description} onChange={handleDescriptionChange}/>
@@ -712,17 +736,15 @@ const handlePreviewShow = () => {
               </Form.Label>
               <div className='d-sm-flex'>
                 <Form.Select className='w-25 me-2 mb-2'>
-                  <option value='usd'>$</option>
-                  <option value='eur'>€</option>
-                  <option value='gbp'>£</option>
-                  <option value='jpy'>¥</option>
+                <option value='usd'>₹</option>
+                  <option value='eur'>$</option>
                 </Form.Select>
                 <Form.Control
                   id='ap-price'
                   type='number'
                   min={200}
                   step={50}
-                  defaultValue={price}
+                  value={price}
                   onChange={(e) => setPrice(e.currentTarget.value)}
                   className='w-100 me-2 mb-2'
                   required
@@ -763,41 +785,7 @@ const handlePreviewShow = () => {
             </section>
 
             
-            {/* Contacts */}
-            <section id='contacts' className='card card-body border-0 shadow-sm p-4 mb-4'>
-              <h2 className='h4 mb-4'>
-                <i className='fi-phone text-primary fs-5 mt-n1 me-2'></i>
-                Contacts
-              </h2>
-              <Row>
-                <Form.Group as={Col} sm={6} controlId='ab-fn' className='mb-3'>
-                  <Form.Label>First name <span className='text-danger'>*</span></Form.Label>
-                  <Form.Control defaultValue='Annette' placeholder='Enter your first name' required />
-                </Form.Group>
-                <Form.Group as={Col} sm={6} controlId='ab-sn' className='mb-3'>
-                  <Form.Label>Second name <span className='text-danger'>*</span></Form.Label>
-                  <Form.Control defaultValue='Black' placeholder='Enter your second name' required />
-                </Form.Group>
-                <Form.Group as={Col} sm={6} controlId='ab-email' className='mb-3'>
-                  <Form.Label>Email <span className='text-danger'>*</span></Form.Label>
-                  <Form.Control type='email' defaultValue='annette_black@email.com' placeholder='Enter your email address' required />
-                </Form.Group>
-                <Form.Group as={Col} sm={6} controlId='ab-phone' className='mb-3'>
-                  <Form.Label>Phone number <span className='text-danger'>*</span></Form.Label>
-                  <Form.Control
-                    as={NumberFormat}
-                    format='+1(##) ###-####'
-                    defaultValue='+1(39) 555-0107'
-                    placeholder='+1(00) 000-0000'
-                    required
-                  />
-                </Form.Group>
-                <Form.Group as={Col} xs={12} controlId='ab-company' className='mb-3'>
-                  <Form.Label>Company</Form.Label>
-                  <Form.Control placeholder='Enter company name' />
-                </Form.Group>
-              </Row>
-            </section>
+           
 
 
             {/* Action buttons */}
@@ -806,9 +794,9 @@ const handlePreviewShow = () => {
                 <i className='fi-eye-on ms-n1 me-2'></i>
                 Preview
               </Button>
-              <Link href='/real-estate/property-promotion' passHref>
+         
                 <Button size='lg' variant='primary d-block w-100 w-sm-auto mb-2' onClick={handleSubmit}>Save and continue</Button>
-              </Link>
+           
             </section>
           {/* </Col> */}
 

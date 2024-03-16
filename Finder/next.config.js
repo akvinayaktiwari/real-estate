@@ -4,6 +4,6 @@ module.exports = {
   reactStrictMode: true,
   images: {
     imageSizes: [48, 64, 88, 96, 128, 256, 384, 416],
-    domains: ['localhost']
+    domains: ['localhost','server-tpbkpxdbza-el.a.run.app','res.cloudinary.com']
   }
 }

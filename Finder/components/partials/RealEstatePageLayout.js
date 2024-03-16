@@ -225,13 +225,13 @@ const RealEstatePageLayout = (props) => {
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Nav.Item> */}
-                <Nav.Item as={Dropdown}>
+                {/* <Nav.Item as={Dropdown}>
                   <Dropdown.Toggle as={Nav.Link} active={props.activeNav==='Home'}>Home</Dropdown.Toggle>
                   <Dropdown.Menu renderOnMount>
                     <Dropdown.Item as={Link} href='/'>Homepage v.1</Dropdown.Item>
                     <Dropdown.Item as={Link} href='/index-2'>Homepage v.2</Dropdown.Item>
                   </Dropdown.Menu>
-                </Nav.Item>
+                </Nav.Item> */}
                 <Nav.Item as={Dropdown}>
                   <Dropdown.Toggle as={Nav.Link} active={props.activeNav==='Catalog'}>Catalog</Dropdown.Toggle>
                   <Dropdown.Menu renderOnMount>
@@ -243,36 +243,24 @@ const RealEstatePageLayout = (props) => {
                 <Nav.Item as={Dropdown}>
                   <Dropdown.Toggle as={Nav.Link} active={props.activeNav==='Account'}>Account</Dropdown.Toggle>
                   <Dropdown.Menu renderOnMount>
-                    <Dropdown.Item as={Link} href='/account-info'>Personal Info</Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/account-security'>Password &amp; Security</Dropdown.Item>
                     <Dropdown.Item as={Link} href='/account-properties'>My Properties</Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/account-wishlist'>Wishlist</Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/account-reviews'>Reviews</Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/account-notifications'>Notifications</Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/signin-light'>Sign In</Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/signup-light'>Sign Up</Dropdown.Item>
+                    <Dropdown.Item as={Link} href='/account-leads'>Leads</Dropdown.Item>
+                    <Dropdown.Item as={Link} href='/account-reviews'>My Blogs</Dropdown.Item>
                   </Dropdown.Menu>
                 </Nav.Item>
-                <Nav.Item as={Dropdown}>
-                  <Dropdown.Toggle as={Nav.Link} active={props.activeNav==='Vendor'}>Vendor</Dropdown.Toggle>
-                  <Dropdown.Menu renderOnMount>
-                    <Dropdown.Item as={Link} href='/add-property'>Add Property</Dropdown.Item>
-                    
-                    <Dropdown.Item as={Link} href='/vendor-properties'>Vendor Page: Properties</Dropdown.Item>
-                    <Dropdown.Item as={Link} href='/vendor-reviews'>Vendor Page: Reviews</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Nav.Item>
+                
                 <Nav.Item as={Dropdown}>
                   <Dropdown.Toggle as={Nav.Link} active={props.activeNav==='Pages'}>Pages</Dropdown.Toggle>
                   <Dropdown.Menu renderOnMount>
                     <Dropdown.Item as={Link} href='/about'>About</Dropdown.Item>
-                    <Dropdown>
+                    <Dropdown.Item as={Link} href='/blog'>Blogs</Dropdown.Item>
+                    {/* <Dropdown>
                       <Dropdown.Toggle as={Dropdown.Item}>Blog</Dropdown.Toggle>
                       <Dropdown.Menu renderOnMount>
                         <Dropdown.Item as={Link} href='/blog'>Blog Grid</Dropdown.Item>
                         <Dropdown.Item as={Link} href='/blog-single'>Single Post</Dropdown.Item>
                       </Dropdown.Menu>
-                    </Dropdown>
+                    </Dropdown> */}
                     <Dropdown.Item as={Link} href='/contacts'>Contacts</Dropdown.Item>
                     <Dropdown.Item as={Link} href='/help-center'>Help Center</Dropdown.Item>
                    
@@ -385,12 +373,8 @@ const RealEstatePageLayout = (props) => {
                     <Nav.Item className='mb-2'>
                       <Nav.Link as={Link} href='#' active={false} className='p-0 fw-normal'>Rent a property</Nav.Link>
                     </Nav.Item>
-                    <Nav.Item className='mb-2'>
-                      <Nav.Link as={Link} href='#' active={false} className='p-0 fw-normal'>Calculate  your property</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item className='mb-2'>
-                      <Nav.Link as={Link} href='#' active={false} className='p-0 fw-normal'>Top offers</Nav.Link>
-                    </Nav.Item>
+                    
+                    
                     <Nav.Item className='mb-2'>
                       <Nav.Link as={Link} href='#' active={false} className='p-0 fw-normal'>Top cities</Nav.Link>
                     </Nav.Item>
@@ -404,18 +388,14 @@ const RealEstatePageLayout = (props) => {
                     <Nav.Item className='mb-2'>
                       <Nav.Link as={Link} href='#' active={false} className='p-0 fw-normal'>About us</Nav.Link>
                     </Nav.Item>
-                    <Nav.Item className='mb-2'>
-                      <Nav.Link as={Link} href='#' active={false} className='p-0 fw-normal'>Our agents</Nav.Link>
-                    </Nav.Item>
+                    
                     <Nav.Item className='mb-2'>
                       <Nav.Link as={Link} href='#' active={false} className='p-0 fw-normal'>Help &amp; support</Nav.Link>
                     </Nav.Item>
                     <Nav.Item className='mb-2'>
                       <Nav.Link as={Link} href='#' active={false} className='p-0 fw-normal'>Contacts</Nav.Link>
                     </Nav.Item>
-                    <Nav.Item className='mb-2'>
-                      <Nav.Link as={Link} href='#' active={false} className='p-0 fw-normal'>News</Nav.Link>
-                    </Nav.Item>
+                    
                   </Nav>
                 </div>
               </div>

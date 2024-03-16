@@ -1,7 +1,7 @@
 import multer from "multer";
 import path from 'path'
 
-const url = 'http://localhost:8080';
+const url = 'https://server-tpbkpxdbza-el.a.run.app';
 const galUploadDirectory = 'blog-images';
 const uploadDirectory = 'property-images';
 

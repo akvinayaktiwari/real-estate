@@ -29,24 +29,9 @@ import axios from 'axios';
 import NumberFormat from 'react-number-format'
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
-import { API } from '../service/api'
 
-const MapContainer = dynamic(() => 
-  import('react-leaflet').then(mod => mod.MapContainer),
-  { ssr: false }
-)
-const TileLayer = dynamic(() => 
-  import('react-leaflet').then(mod => mod.TileLayer),
-  { ssr: false }
-)
-const Popup = dynamic(() => 
-  import('react-leaflet').then(mod => mod.Popup),
-  { ssr: false }
-)
-const CustomMarker = dynamic(() => 
-  import('../components/partials/CustomMarker'),
-  { ssr: false }
-)
+
+
 import 'leaflet/dist/leaflet.css'
 
 
@@ -180,32 +165,51 @@ const AddPropertyPage = () => {
   )
   
   // Gallery state
-  const [gallery, setGallery] = useState({})
+  const [gallery, setGallery] = useState([])
   const [file, setFile] = useState(null)
+  
     const hasUpdated = useRef(false);
-  useEffect(() => {
+  useEffect( () => {
         
        //console.log('hello')
+       const url = "https://api.cloudinary.com/v1_1/dpbjbqh5h/image/upload";
        if(!hasUpdated.current && file !== null){
           if(file ){
-          console.log('hello')
-          const data = new FormData();
-          file.forEach((f) => {
-            console.log(f.file)
-            data.append("files", f.file); // Use the same key for each file
-          });
-          fetch('http://localhost:8080/uploadgallery', {
-            method: 'POST',
-            body: data,
-          })
-          .then(response => response.json())
-          .then(data => setGallery(data.imageUrls)) // Assuming the response contains an array of URLs
-          .catch(error => console.error('Error:', error));
           
           //setMainPicture(response.data);
            hasUpdated.current = true;
+           
+
+    // Convert the FileList to an array and map each file to a promise
+           const formData = new FormData();
+          const uploadPromises = Array.from(file).map((f) => {
+           
+            formData.append('file', f.file);
+            formData.append('upload_preset', 'akvinayaktiwariproperty');
+
+            // Return the promise created by fetch
+            return fetch(url, {
+              method: 'POST',
+              body: formData,
+            })
+            .then(response => response.json())
+            .then(data => data.secure_url); // Extract the secure_url from the response
+          });
+
+          // Wait for all the upload promises to resolve
+          console.log(uploadPromises)
+          Promise.all(uploadPromises).then(urls => {
+            // Update the state with all new image URLs
+            setGallery(prevUrls => [...prevUrls, ...urls]);
+            
+            
+          }).catch(error => {
+            console.error("Error uploading images:", error);
+          });
+                        
+                
+              }
         }
-  }
       }, [file])
   const [title, setTitle] = useState('Pine');
 
@@ -322,13 +326,21 @@ const AddPropertyPage = () => {
     price: parseInt(price),
     description: description,
     badges: badges,
-    footer: footer
+    footer: footer,
+    address: address,
+    city:city,
+    zipCode:zipCode,
 
     }
     console.log(data);
     try {
       
-      const response=await API.createProperty(data);
+      // const response=await API.createProperty(data);
+      const response = await axios.post('/api/property/addProperty', data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
       console.log('Response:', response.data);
       router.push('/account-properties')
@@ -399,7 +411,7 @@ const AddPropertyPage = () => {
         <Modal.Header closeButton>
           <h3 className='h5 text-muted fw-normal modal-title d-none d-sm-block text-nowrap'>Property preview</h3>
           <div className='d-flex align-items-center justify-content-sm-end w-100 ms-sm-auto'>
-            <Button as={Link} href='/real-estate/property-promotion' size='sm' className='me-4'>Save and continue</Button>
+            <Button as={Link} href='/real-estate/property-promotion' size='sm' className='me-4' onClick={handleSubmit} >Save and continue</Button>
             <span className='fs-xs text-muted ms-auto ms-sm-0 me-2'>[ESC]</span>
           </div>
         </Modal.Header>

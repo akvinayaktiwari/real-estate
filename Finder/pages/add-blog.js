@@ -126,7 +126,7 @@ const AddPropertyPage = () => {
     data.append("name", files.name);
     data.append("file", files);
     
-    fetch('http://localhost:8080/upload', {
+    fetch('https://server-tpbkpxdbza-el.a.run.app/upload', {
         method: 'POST',
         body: data,
     })

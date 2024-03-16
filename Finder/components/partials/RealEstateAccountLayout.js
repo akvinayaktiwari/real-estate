@@ -55,7 +55,7 @@ const RealEstateAccountLayout = ({ accountPageTitle, children }) => {
               <i className='fi-plus me-2'></i>
               Add property
             </Button>
-            <Button
+            {/* <Button
               variant='outline-secondary'
               className='d-block d-md-none w-100 mb-3'
               onClick={() => setOpen(!open)}
@@ -64,11 +64,11 @@ const RealEstateAccountLayout = ({ accountPageTitle, children }) => {
             >
               <i className='fi-align-justify me-2'></i>
               Menu
-            </Button>
+            </Button> */}
             <Collapse in={open} className='d-md-block'>
               <div id='account-menu'>
               <CardNav className='pt-3'>
-                <CardNav.Item
+                {/* <CardNav.Item
                   href='/account-info'
                   icon='fi-user'
                   active={accountPageTitle === 'Personal Info' ? true : false}
@@ -81,7 +81,7 @@ const RealEstateAccountLayout = ({ accountPageTitle, children }) => {
                   active={accountPageTitle === 'Password & Security' ? true : false}
                 >
                   Password &amp; Security
-                </CardNav.Item>
+                </CardNav.Item> */}
                 <CardNav.Item
                   href='/account-properties'
                   icon='fi-home'
@@ -90,11 +90,11 @@ const RealEstateAccountLayout = ({ accountPageTitle, children }) => {
                   My Properties
                 </CardNav.Item>
                 <CardNav.Item
-                  href='/account-wishlist'
+                  href='/account-leads'
                   icon='fi-heart'
-                  active={accountPageTitle === 'Wishlist' ? true : false}
+                  active={accountPageTitle === 'Leads' ? true : false}
                 >
-                  Wishlist
+                  Leads
                   <span className='badge bg-faded-light ms-2'>4</span>
                 </CardNav.Item>
                 <CardNav.Item
@@ -104,7 +104,7 @@ const RealEstateAccountLayout = ({ accountPageTitle, children }) => {
                 >
                   My Blogs
                 </CardNav.Item>
-                <CardNav.Item
+                {/* <CardNav.Item
                   href='/account-notifications'
                   icon='fi-bell'
                   active={accountPageTitle === 'Notifications' ? true : false}
@@ -116,7 +116,7 @@ const RealEstateAccountLayout = ({ accountPageTitle, children }) => {
                 </CardNav.Item>
                 <CardNav.Item href='/signin-light' icon='fi-logout'>
                   Sign Out
-                </CardNav.Item>
+                </CardNav.Item> */}
               </CardNav>
               </div>
             </Collapse>

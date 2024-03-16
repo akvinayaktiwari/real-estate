@@ -9,7 +9,7 @@ import PropertyCard from '../components/PropertyCard'
 import axios from 'axios' 
 // import './account-property.css';
 
-import { API } from '../service/api'
+//import { API } from '../service/api'
 
 const AccountPropertiesPage = () => {
   const router=useRouter()
@@ -72,7 +72,7 @@ const AccountPropertiesPage = () => {
   const [blogs, setBlogs ] = useState([]);
 
 const getProperty = async (e) => {
-  let response = await axios.get("http://localhost:8080/properties");
+  let response = await axios.get('/api/property/properties');
   console.log(response)
   let resp = await response.data;
   console.log(resp);
@@ -167,7 +167,9 @@ const getProperty = async (e) => {
                 props: {
                   'data-index': indx,
                    onClick: async (indx) => {  
-                    const response=await API.deleteProperty(property._id);
+                    //const response=await API.deleteProperty(property._id);
+                    const response = await axios.delete(`/api/property/deleteProperty/${property._id}`);
+                    console.log('Property deleted successfully:', response.data);
                     const updatedBlogs = [...blogs];
                     updatedBlogs.splice(indx, 1);
                     setBlogs(updatedBlogs);

@@ -60,7 +60,7 @@ const HomePage = () => {
   const sortedByDate = products.sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );
-  const latestThree = sortedByDate.slice(0, 3);
+  const latestThree = products.slice(0, 3);
 
   console.log(latestThree)
   const allImageUrlsArray = latestThree.flatMap(property => property.images);

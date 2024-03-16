@@ -22,7 +22,7 @@ import { useRouter } from 'next/router'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-import { API } from '../../service/api'
+
 
 const SinglePropertyAltPage = () => {
 
@@ -43,7 +43,12 @@ const SinglePropertyAltPage = () => {
   
     const getThumbnails = async (e) => {
         try {
-            let response = await API.getPropertyById(id)
+            let response = await axios.get(`/api/property/getProperty/${id}`, {
+                  headers: {
+                    // Add any required headers here
+                    'Content-Type': 'application/json',
+                  },
+                });
             const resp=response.data
             setThumbnailsReady(true);
             console.log(resp)
@@ -60,9 +65,11 @@ const SinglePropertyAltPage = () => {
   
   
     useEffect(() => {
+        if(id){
         getThumbnails();
+        }
         // getAmenities();
-    }, [])
+    }, [id])
     console.log("Hello")
     console.log(thumbnails)
 
@@ -126,16 +133,16 @@ const SinglePropertyAltPage = () => {
           grabCursor
           className='swiper-nav-onhover rounded-3'
         >
-          {thumbnails.map((thumbnail, index) => (
+          {thumbnails.map((thumbnail, index) =>  (
           <SwiperSlide key={index} className='d-flex'>
             <ImageLoader className='rounded-3' src={thumbnail} width={967} height={545} alt={`Image ${index + 1}`} />
           </SwiperSlide>
         ))}
-          <SwiperSlide>
+          {/* <SwiperSlide>
             <div className='ratio ratio-16x9'>
               <iframe src='https://www.youtube.com/embed/dofyR9p8e7w' className='rounded-3' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
             </div>
-          </SwiperSlide>
+          </SwiperSlide> */}
           <SlidesCount />
         </Swiper>  : "" }
         <ul className='swiper-thumbnails'></ul>
@@ -154,10 +161,18 @@ const SinglePropertyAltPage = () => {
   const [bedroom, setBedroom] = useState(0);
   const [parking, setParking] = useState(0);
   let [amenities, setAmenities] = useState([]);
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [zipCode, setZipCode] = useState('');
 
     const getProperty = async (e) => {
         try {
-           let response = await API.getPropertyById(id)
+           let response = await axios.get(`/api/property/getProperty/${id}`, {
+                  headers: {
+                    // Add any required headers here
+                    'Content-Type': 'application/json',
+                  },
+                });
            
             const resp=response.data
             // console.log(resp[0].thumbnails);
@@ -173,6 +188,9 @@ const SinglePropertyAltPage = () => {
             //console.log(resp.amenities)
             setAmenities(resp.amenities);
             // console.log(thumbnails);
+            setAddress(resp.address);
+            setCity(resp.city);
+            setZipCode(resp.zipCode);
             
         }
         catch(error) {
@@ -183,8 +201,8 @@ const SinglePropertyAltPage = () => {
 const [properties, setProperties] = useState([])
 const fetchData = async () => {
         try {
-            const response = await API.getAllProperty();
-            if (response.isSuccess) {
+            let response = await axios.get('/api/property/properties');
+            if (response.data) {
               
                 setProperties(response.data);
             } else {
@@ -221,8 +239,8 @@ console.log(amenities[0]);
 
         {/* Breadcrumb */}
         <Breadcrumb className='mb-3 pt-md-3'>
-          <Breadcrumb.Item linkAs={Link} href='/real-estate'>Home</Breadcrumb.Item>
-          <Breadcrumb.Item linkAs={Link} href='/real-estate/catalog?category=rent'>Property for rent</Breadcrumb.Item>
+          <Breadcrumb.Item linkAs={Link} href='/'>Home</Breadcrumb.Item>
+          <Breadcrumb.Item linkAs={Link} href='/catalog?category=rent'>Property for rent</Breadcrumb.Item>
           <Breadcrumb.Item active>Pine Apartments</Breadcrumb.Item>
         </Breadcrumb>
 
@@ -472,7 +490,7 @@ console.log(amenities[0]);
             {properties.map((property, indx) => indx<5 && (
               <SwiperSlide key={indx} className='h-auto'>
                 <PropertyCard
-                  href={property.href}
+                  href={`/single/${property._id}`}
                   images={[[property.images[0], 467, 305,'Image']]}
                   title={property.title}
                   category={property.category}
