@@ -2,7 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/api/property/properties": "pages/api/property/properties.js",
-  "/404": "pages/404.js",
-  "/account-properties": "pages/account-properties.js"
+  "/single/[id]": "pages/single/[id].js",
+  "/api/property/getProperty/[id]": "pages/api/property/getProperty/[id].js",
+  "/api/property/properties": "pages/api/property/properties.js"
 }

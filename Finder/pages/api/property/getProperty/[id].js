@@ -1,7 +1,9 @@
 import Property from '../../../../model/property'
+import Connection from '../../../../database/config';
 
 
 export default async function handler(req, res) {
+    await Connection();
     // Optional: Check if the method is GET
     if (req.method !== 'GET') {
         return res.status(405).json({ msg: 'Method Not Allowed' });

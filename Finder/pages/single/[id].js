@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import axios from 'axios'
 import RealEstatePageLayout from '../../components/partials/RealEstatePageLayout'
 import Link from 'next/link'
 import Container from 'react-bootstrap/Container'
@@ -65,13 +66,13 @@ const SinglePropertyAltPage = () => {
   
   
     useEffect(() => {
-        if(id){
+        
         getThumbnails();
-        }
+        
         // getAmenities();
     }, [id])
-    console.log("Hello")
-    console.log(thumbnails)
+    
+    
 
     const [currentSlide, setCurrentSlide] = useState()
     const [totalSlides, setTotalSlides] = useState()
@@ -163,7 +164,7 @@ const SinglePropertyAltPage = () => {
   let [amenities, setAmenities] = useState([]);
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
-  const [zipCode, setZipCode] = useState('');
+  const [zipCode, setZipCode] = useState('');
 
     const getProperty = async (e) => {
         try {
@@ -173,11 +174,12 @@ const SinglePropertyAltPage = () => {
                     'Content-Type': 'application/json',
                   },
                 });
-           
+            console.log('HHHHHHHHH')
+            console.log(response.data)
             const resp=response.data
             // console.log(resp[0].thumbnails);
             // setThumbnailsReady(true);
-            
+            console.log(resp)
             setProperty(resp);
             setBedroom(resp.footer[0]);
             setBathroom(resp.footer[1]);
@@ -203,7 +205,6 @@ const fetchData = async () => {
         try {
             let response = await axios.get('/api/property/properties');
             if (response.data) {
-              
                 setProperties(response.data);
             } else {
                 console.error("Error fetching data:", response.error);
@@ -212,11 +213,14 @@ const fetchData = async () => {
             console.error("An error occurred while fetching data:", error);
         }
     };
+
 useEffect(() => {
+  console.log('hello for use effect')
   getProperty();
   fetchData();
 
 }, [id])
+
 console.log(amenities[0]);
 
 

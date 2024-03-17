@@ -1,5 +1,5 @@
 import Property from '../../../model/property'
-
+import Connection from '../../../database/config';
 
 export default async function handler(req, res) {
     // Optional: Check if the method is GET
